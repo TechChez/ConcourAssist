@@ -2,76 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EU Concours Practice</title>
   <style>
+    /* Basic Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
     body {
       display: flex;
       min-height: 100vh;
+      background-color: #f0f2f5;
     }
+    /* Sidebar */
     .sidebar {
       width: 220px;
-      background-color: #f7f7f7;
-      padding: 20px;
-      border-right: 1px solid #ddd;
-    }
-    .sidebar h2 {
-      margin-bottom: 20px;
-      font-size: 18px;
-      color: #333;
+      background-color: #ffffff;
+      padding: 30px 20px;
+      border-right: 1px solid #e0e0e0;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
     .sidebar a {
-      display: block;
-      margin-bottom: 15px;
       text-decoration: none;
-      color: #555;
-      font-size: 16px;
+      color: #333;
+      font-size: 18px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background-color 0.3s, color 0.3s;
       cursor: pointer;
-      transition: color 0.3s;
     }
     .sidebar a:hover {
-      color: #0077cc;
+      background-color: #0077cc;
+      color: white;
     }
+    /* Main content */
     .main-content {
       flex-grow: 1;
       padding: 40px;
-      background-color: #fff;
+      background-color: #f9f9f9;
     }
     .main-content h1 {
-      font-size: 28px;
-      color: #333;
-      margin-bottom: 10px;
+      font-size: 32px;
+      color: #222;
+      margin-bottom: 20px;
     }
-    .main-content p {
+    .main-content p, .main-content ul {
       font-size: 18px;
-      color: #666;
+      color: #555;
       margin-top: 10px;
+      line-height: 1.6;
+    }
+    ul {
+      margin-left: 20px;
     }
   </style>
 </head>
 <body>
 
   <div class="sidebar">
-    <h2>Navigation</h2>
     <a onclick="showPage('home')">Home</a>
     <a onclick="showPage('ad5-internal')">AD5 Internal</a>
     <a onclick="showPage('ad5-external')">AD5 External</a>
   </div>
 
   <div class="main-content" id="content">
-    <h1>Welcome to EU Concours Practice</h1>
-    <p>This AI assistant is designed to help you prepare for the European Union concours exams by generating practice questions, predicting exam topics, and helping you structure your study plan.</p>
-    <p>Use the sidebar to explore:</p>
-    <ul>
-      <li><strong>AD5 Internal</strong> — Practice and resources for internal competitions.</li>
-      <li><strong>AD5 External</strong> — Practice and resources for external competitions.</li>
-    </ul>
+    <!-- Home content will load here first -->
   </div>
 
   <script>
@@ -90,16 +91,26 @@
       } else if (page === 'ad5-internal') {
         content.innerHTML = `
           <h1>AD5 Internal Competition</h1>
-          <p>The AD5 Internal competitions are aimed at officials already working within the EU institutions. They test general EU knowledge, verbal, numerical, and abstract reasoning, along with understanding of internal policies and procedures.</p>
-          <p>Preparation focuses on consolidating internal experience and demonstrating strategic insight into EU affairs.</p>
+          <p>The AD5 Internal competitions are open to existing EU staff and officials. They assess general EU knowledge, reasoning skills, and familiarity with internal procedures and operations.</p>
+          <p>Preparation focuses on leveraging internal work experience, understanding institutional practices, and strategic thinking within the EU context.</p>
         `;
       } else if (page === 'ad5-external') {
-        content.innerHTML = `
-          <h1>AD5 External Competition</h1>
-          <p>The AD5 External competitions are open to the general public and seek to recruit new talent into EU institutions. They test EU knowledge, reasoning skills, and specialist competences.</p>
-          <p>Preparation focuses on demonstrating strong academic background, analytical abilities, and an understanding of European integration and policies.</p>
-        `;
+        const password = prompt("Please enter the password to access AD5 External:");
+        if (password === "password") {
+          content.innerHTML = `
+            <h1>AD5 External Competition</h1>
+            <p>The AD5 External competitions aim to recruit new talent into the EU institutions. They evaluate a candidate's EU knowledge, analytical skills, verbal, numerical, and abstract reasoning abilities, and general aptitude for public administration.</p>
+            <p>Successful candidates demonstrate a strong educational background, a passion for European affairs, and excellent problem-solving skills.</p>
+          `;
+        } else {
+          alert("Incorrect password. Access denied.");
+        }
       }
+    }
+
+    // Load Home by default when page loads
+    window.onload = function() {
+      showPage('home');
     }
   </script>
 
