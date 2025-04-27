@@ -2,27 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EU Concours Preparation Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Concours Practice</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .message { margin-bottom: 20px; }
-    .user { color: #004080; }
-    .assistant { color: #008000; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #f7f7f7;
+      padding: 20px;
+      border-right: 1px solid #ddd;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+    .sidebar a {
+      display: block;
+      margin-bottom: 15px;
+      text-decoration: none;
+      color: #555;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    .sidebar a:hover {
+      color: #0077cc;
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: #fff;
+    }
+    .main-content h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .main-content p {
+      font-size: 18px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Welcome to the EU Concours Preparation Assistant</h1>
-  <p>Welcome! I'm your AI Assistant here to help you prepare for your EU concours exams.</p>
-  <p><strong>Disclaimer:</strong> This tool is for educational purposes only and not affiliated with EPSO or the EU.</p>
+  <div class="sidebar">
+    <h2>Navigation</h2>
+    <a href="#">AD5 Internal</a>
+    <a href="#">AD5 External</a>
+  </div>
 
-  <div class="message user"><strong>User:</strong> How can I start practicing?</div>
-  <div class="message assistant"><strong>Assistant:</strong> You can ask me to generate practice questions or predict exam topics!</div>
-
-  <div class="message user"><strong>User:</strong> Generate 5 questions, please!</div>
-  <div class="message assistant"><strong>Assistant:</strong> [Here are the 5 questions...]</div>
-
-  <!-- You can add more conversation manually here -->
+  <div class="main-content">
+    <h1>Welcome to EU Concours Practice</h1>
+    <p>Select an option from the sidebar to get started.</p>
+  </div>
 
 </body>
 </html>
