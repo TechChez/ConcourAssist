@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Concours Practice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #f7f7f7;
+      padding: 20px;
+      border-right: 1px solid #ddd;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+    .sidebar a {
+      display: block;
+      margin-bottom: 15px;
+      text-decoration: none;
+      color: #555;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    .sidebar a:hover {
+      color: #0077cc;
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: #fff;
+    }
+    .main-content h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .main-content p {
+      font-size: 18px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Navigation</h2>
+    <a href="#">AD5 Internal</a>
+    <a href="#">AD5 External</a>
+  </div>
+
+  <div class="main-content">
+    <h1>Welcome to EU Concours Practice</h1>
+    <p>Select an option from the sidebar to get started.</p>
+  </div>
+
+</body>
+</html>
