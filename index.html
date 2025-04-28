@@ -2,69 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Concours Preparation Platform</title>
+  <title>concours.io</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', sans-serif;
       background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #202123;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      height: 60px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      font-size: 1.8em;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      min-height: 0;
     }
     .sidebar {
-      position: fixed;
-      height: 100%;
       width: 260px;
       background-color: #202123;
+      display: flex;
+      flex-direction: column;
       padding-top: 20px;
-      overflow-x: hidden;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
-    .sidebar a, .dropdown-btn {
+    .sidebar a {
       padding: 12px 20px;
       text-decoration: none;
       font-size: 18px;
       color: #b0b3b8;
       display: block;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      outline: none;
       transition: background 0.2s, color 0.2s;
     }
-    .sidebar a:hover, .dropdown-btn:hover {
+    .sidebar a:hover, .sidebar a.active-tab {
       background-color: #343541;
       color: white;
-    }
-    .active-tab {
       border-left: 4px solid #00aaff;
-      background-color: #343541;
-      color: white !important;
-    }
-    .dropdown-container {
-      display: none;
-      background-color: #2c2d31;
-      padding-left: 20px;
-    }
-    .header {
-      margin-left: 260px;
-      padding: 20px;
-      background-color: #00aaff;
-      color: white;
-      text-align: center;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 2.2em;
-    }
-    .header h2 {
-      margin: 10px 0 0 0;
-      font-size: 1.2em;
-      color: white !important;
+      padding-left: 16px;
     }
     .main-content {
-      margin-left: 260px;
+      flex: 1;
       padding: 30px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
     }
     #concours-assistant {
       position: fixed;
@@ -80,39 +70,35 @@
     #concours-assistant h3 {
       margin-top: 0;
     }
+    .loading {
+      font-size: 24px;
+      text-align: center;
+      margin-top: 50px;
+      color: #00aaff;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="sidebar">
-  <a href="#" id="home-tab" onclick="openTab('home', this)">🏠 Home</a>
-  <button class="dropdown-btn">📚 Internal Exams ▼</button>
-  <div class="dropdown-container">
-    <a href="#" id="ad5-internal-tab" onclick="openTab('ad5-internal', this)">AD5 Internal</a>
+<header>
+  concours.io
+</header>
+
+<div class="container">
+  <div class="sidebar">
+    <a href="#" id="home-tab" onclick="openTab('home', this)">🏠 Home</a>
+    <a href="#" id="ad5-external-tab" onclick="openTab('ad5-external', this)">🛡️ 2025 AD5 External</a>
+    <a href="#" id="ad5-internal-tab" onclick="openTab('ad5-internal', this)">📚 2024 AD5 Internal</a>
+    <a href="#" id="ad6-internal-tab" onclick="openTab('ad6-internal', this)">📚 2024 AD6 Internal</a>
   </div>
-  <button class="dropdown-btn">🌍 External Exams ▼</button>
-  <div class="dropdown-container">
-    <a href="#" id="ad5-external-tab" onclick="openTab('ad5-external', this)">AD5 External</a>
+
+  <div class="main-content" id="tab-content">
+    <h3>Welcome! 🎯</h3>
+    <p>👋 Ready to kickstart your EU career?</p>
+    <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
+    <p>🤖 Unlock your smart Assistant when studying Internal or External competitions!</p>
   </div>
-</div>
-
-<div class="header">
-  <h1>Concours Hub</h1>
-  <h2>Your smarter way to prepare for EU concours exams.</h2>
-</div>
-
-<div class="main-content" id="tab-content">
-  <h3>Welcome! 🎯</h3>
-  <p>👋 Ready to kickstart your EU career?  
-  📚 Find dedicated resources, tailored tips, and a smart assistant to guide your concours preparation journey.  
-  🚀 Let’s get you exam-ready — faster, smarter, better!</p>
-
-  <p><strong>How to Start:</strong></p>
-  <ul>
-    <li>📚 Select <strong>Internal Exams</strong> if you're already inside the EU institutions.</li>
-    <li>🌍 Select <strong>External Exams</strong> if you're applying from outside.</li>
-    <li>🤖 Need Help? On exam pages, you’ll unlock our smart Assistant!</li>
-  </ul>
 </div>
 
 <div id="concours-assistant">
@@ -129,55 +115,54 @@
 </div>
 
 <script>
-  var dropdown = document.getElementsByClassName("dropdown-btn");
-  var i;
-
-  for (i = 0; i < dropdown.length; i++) {
-    dropdown[i].addEventListener("click", function() {
-      this.classList.toggle("active");
-      var dropdownContent = this.nextElementSibling;
-      if (dropdownContent.style.display === "block") {
-        dropdownContent.style.display = "none";
-      } else {
-        dropdownContent.style.display = "block";
-      }
-    });
-  }
-
   function openTab(tabName, element) {
-    // Remove active-tab class from all sidebar links
     var links = document.querySelectorAll(".sidebar a");
     links.forEach(link => link.classList.remove("active-tab"));
     element.classList.add("active-tab");
 
-    if (tabName === 'home') {
-      document.getElementById('tab-content').innerHTML = `
-        <h3>Welcome! 🎯</h3>
-        <p>👋 Ready to kickstart your EU career?  
-        📚 Find dedicated resources, tailored tips, and a smart assistant to guide your concours preparation journey.  
-        🚀 Let’s get you exam-ready — faster, smarter, better!</p>
+    var content = document.getElementById('tab-content');
+    var chatbot = document.getElementById('concours-assistant');
 
-        <p><strong>How to Start:</strong></p>
-        <ul>
-          <li>📚 Select <strong>Internal Exams</strong> if you're already inside the EU institutions.</li>
-          <li>🌍 Select <strong>External Exams</strong> if you're applying from outside.</li>
-          <li>🤖 Need Help? On exam pages, you’ll unlock our smart Assistant!</li>
-        </ul>
-      `;
-      document.getElementById('concours-assistant').style.display = 'none';
-    } else if (tabName === 'ad5-internal') {
-      document.getElementById('tab-content').innerHTML = `
-        <h3>AD5 Internal Competitions 📚</h3>
-        <p>🔹 Find everything you need for the AD5 internal selection process: key topics, sample questions, and exam strategy tips.</p>
-      `;
-      document.getElementById('concours-assistant').style.display = 'block';
-    } else if (tabName === 'ad5-external') {
-      document.getElementById('tab-content').innerHTML = `
-        <h3>AD5 External Competitions 🌍</h3>
-        <p>🔹 Preparing for your external AD5 competition? Access preparation guides, practice exercises, and more.</p>
-      `;
-      document.getElementById('concours-assistant').style.display = 'block';
-    }
+    content.innerHTML = '<div class="loading">Loading...</div>';
+    chatbot.style.display = "none";
+
+    setTimeout(function() {
+      if (tabName === 'home') {
+        content.innerHTML = `
+          <h3>Welcome! 🎯</h3>
+          <p>👋 Ready to kickstart your EU career?</p>
+          <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
+          <p>🤖 Unlock your smart Assistant when studying Internal or External competitions!</p>`;
+      } else if (tabName === 'ad5-external') {
+        var password = prompt("🔒 Enter password to access 2025 AD5 External:");
+        if (password !== "password") {
+          alert("Incorrect password. Access denied.");
+          content.innerHTML = '<h3>Access Denied 🚫</h3>';
+          return;
+        }
+        content.innerHTML = `
+          <h3>🛡️ 2025 AD5 External Competition</h3>
+          <p>🚀 Prepare smarter for the 2025 External competition!</p>
+          <p>📈 [Placeholder Pie Chart: Topics Distribution]</p>
+          <p>📊 [Placeholder Pie Chart: Question Difficulty]</p>
+          <p>🤖 Chatbot unlocked below!</p>`;
+        chatbot.style.display = "block";
+      } else if (tabName === 'ad5-internal') {
+        content.innerHTML = `
+          <h3>📚 2024 AD5 Internal Competition</h3>
+          <p>🧠 Deep-dive resources for internal candidates.</p>
+          <p>📈 [Placeholder Pie Chart: Topics Distribution]</p>
+          <p>📊 [Placeholder Pie Chart: Question Difficulty]</p>`;
+        chatbot.style.display = "block";
+      } else if (tabName === 'ad6-internal') {
+        content.innerHTML = `
+          <h3>📚 2024 AD6 Internal Competition</h3>
+          <p>📘 Resources for advanced internal candidates.</p>
+          <p>📈 [Placeholder Pie Chart: Topics Distribution]</p>
+          <p>📊 [Placeholder Pie Chart: Question Difficulty]</p>`;
+        chatbot.style.display = "block";
+      }
+    }, 500);
   }
 
   function checkPassword() {
@@ -185,7 +170,7 @@
     if (password === 'password') {
       document.getElementById('assistant-message').innerHTML = 'Access granted. How can I assist you?';
       document.getElementById('password-input').style.display = 'none';
-      event.target.style.display = 'none'; // hide submit button
+      event.target.style.display = 'none';
       document.getElementById('chat-interface').style.display = 'block';
     } else {
       document.getElementById('assistant-message').innerHTML = 'Incorrect password. Try again.';
