@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>concours.io</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -20,13 +21,11 @@
       align-items: center;
       padding: 0 20px;
       height: 60px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       font-size: 1.8em;
     }
     .container {
       flex: 1;
       display: flex;
-      min-height: 0;
     }
     .sidebar {
       width: 260px;
@@ -34,7 +33,6 @@
       display: flex;
       flex-direction: column;
       padding-top: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
     .sidebar a {
       padding: 12px 20px;
@@ -54,21 +52,6 @@
       flex: 1;
       padding: 30px;
       overflow-y: auto;
-      background-color: #f9f9f9;
-    }
-    #concours-assistant {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 300px;
-      background-color: #eef6fb;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-      display: none;
-    }
-    #concours-assistant h3 {
-      margin-top: 0;
     }
     .loading {
       font-size: 24px;
@@ -78,7 +61,6 @@
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -87,102 +69,117 @@
 
 <div class="container">
   <div class="sidebar">
-    <a href="#" id="home-tab" onclick="openTab('home', this)">🏠 Home</a>
-    <a href="#" id="ad5-external-tab" onclick="openTab('ad5-external', this)">🛡️ 2025 AD5 External</a>
-    <a href="#" id="ad5-internal-tab" onclick="openTab('ad5-internal', this)">📚 2024 AD5 Internal</a>
-    <a href="#" id="ad6-internal-tab" onclick="openTab('ad6-internal', this)">📚 2024 AD6 Internal</a>
+    <a href="#" onclick="openTab('home', this)" class="active-tab">🏠 Home</a>
+    <a href="#" onclick="openTab('ad5-external', this)">🛡️ 2025 AD5 External</a>
+    <a href="#" onclick="openTab('ad5-internal', this)">📚 2024 AD5 Internal</a>
+    <a href="#" onclick="openTab('ad6-internal', this)">📚 2024 AD6 Internal</a>
   </div>
 
   <div class="main-content" id="tab-content">
     <h3>Welcome! 🎯</h3>
     <p>👋 Ready to kickstart your EU career?</p>
     <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
-    <p>🤖 Unlock your smart Assistant when studying Internal or External competitions!</p>
-  </div>
-</div>
-
-<div id="concours-assistant">
-  <h3>Concours Assistant 🤖</h3>
-  <p id="assistant-message">Please enter the password to start:</p>
-  <input type="password" id="password-input" placeholder="Enter password" style="width: 100%; padding: 5px;">
-  <button onclick="checkPassword()" style="margin-top: 10px; width: 100%;">Submit</button>
-
-  <div id="chat-interface" style="display:none; margin-top:20px;">
-    <input type="text" id="user-input" placeholder="Ask me anything..." style="width: 100%; padding: 5px;">
-    <button onclick="sendMessage()" style="margin-top: 10px; width: 100%;">Send</button>
-    <div id="chat-response" style="margin-top: 10px; background: white; padding: 10px; border-radius: 5px;"></div>
+    <p>🛠️ More tools and features coming soon.</p>
   </div>
 </div>
 
 <script>
-  function openTab(tabName, element) {
-    var links = document.querySelectorAll(".sidebar a");
-    links.forEach(link => link.classList.remove("active-tab"));
-    element.classList.add("active-tab");
+function openTab(tabName, element) {
+  document.querySelectorAll(".sidebar a").forEach(link => link.classList.remove("active-tab"));
+  element.classList.add("active-tab");
 
-    var content = document.getElementById('tab-content');
-    var chatbot = document.getElementById('concours-assistant');
+  const content = document.getElementById("tab-content");
+  content.innerHTML = '<div class="loading">Loading...</div>';
 
-    content.innerHTML = '<div class="loading">Loading...</div>';
-    chatbot.style.display = "none";
-
-    setTimeout(function() {
-      if (tabName === 'home') {
-        content.innerHTML = `
-          <h3>Welcome! 🎯</h3>
-          <p>👋 Ready to kickstart your EU career?</p>
-          <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
-          <p>🤖 Unlock your smart Assistant when studying Internal or External competitions!</p>`;
-      } else if (tabName === 'ad5-external') {
-        var password = prompt("🔒 Enter password to access 2025 AD5 External:");
-        if (password !== "password") {
-          alert("Incorrect password. Access denied.");
-          content.innerHTML = '<h3>Access Denied 🚫</h3>';
-          return;
-        }
-        content.innerHTML = `
-          <h3>🛡️ 2025 AD5 External Competition</h3>
-          <p>🚀 Prepare smarter for the 2025 External competition!</p>
-          <p>📈 [Placeholder Pie Chart: Topics Distribution]</p>
-          <p>📊 [Placeholder Pie Chart: Question Difficulty]</p>
-          <p>🤖 Chatbot unlocked below!</p>`;
-        chatbot.style.display = "block";
-      } else if (tabName === 'ad5-internal') {
-        content.innerHTML = `
-          <h3>📚 2024 AD5 Internal Competition</h3>
-          <p>🧠 Deep-dive resources for internal candidates.</p>
-          <p>📈 [Placeholder Pie Chart: Topics Distribution]</p>
-          <p>📊 [Placeholder Pie Chart: Question Difficulty]</p>`;
-        chatbot.style.display = "block";
-      } else if (tabName === 'ad6-internal') {
-        content.innerHTML = `
-          <h3>📚 2024 AD6 Internal Competition</h3>
-          <p>📘 Resources for advanced internal candidates.</p>
-          <p>📈 [Placeholder Pie Chart: Topics Distribution]</p>
-          <p>📊 [Placeholder Pie Chart: Question Difficulty]</p>`;
-        chatbot.style.display = "block";
+  setTimeout(() => {
+    if (tabName === "home") {
+      content.innerHTML = `<h3>Welcome! 🎯</h3>
+        <p>👋 Ready to kickstart your EU career?</p>
+        <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
+        <p>🛠️ More tools and features coming soon.</p>`;
+    } else if (tabName === "ad5-external") {
+      const password = prompt("🔒 Enter password to access 2025 AD5 External:");
+      if (password !== "password") {
+        alert("Incorrect password. Access denied.");
+        content.innerHTML = '<h3>Access Denied 🚫</h3>';
+        return;
       }
-    }, 500);
-  }
-
-  function checkPassword() {
-    var password = document.getElementById('password-input').value;
-    if (password === 'password') {
-      document.getElementById('assistant-message').innerHTML = 'Access granted. How can I assist you?';
-      document.getElementById('password-input').style.display = 'none';
-      event.target.style.display = 'none';
-      document.getElementById('chat-interface').style.display = 'block';
+      content.innerHTML = `
+        <h3>🛡️ 2025 AD5 External Competition</h3>
+        <div style="display: flex; gap: 30px; justify-content: space-between; margin-bottom: 30px;">
+          <div style="flex: 1; background: white; padding: 15px; border-radius: 8px;">
+            <h3>Question Category</h3>
+            <canvas id="categoryChart" height="180"></canvas>
+          </div>
+          <div style="flex: 1; background: white; padding: 15px; border-radius: 8px;">
+            <h3>Focus Materials</h3>
+            <canvas id="materialChart" height="180"></canvas>
+          </div>
+        </div>
+        <div style="background: white; padding: 30px; border-radius: 10px; margin-top: 20px;">
+          <label><strong>What do you want generated?</strong></label><br/>
+          <select id="question-type" style="margin-top: 10px; margin-bottom: 10px; padding: 6px; width: 100%;">
+            <option value="MCQ">EU General Knowledge (MCQs)</option>
+            <option value="Verbal">Verbal Reasoning</option>
+            <option value="Numerical">Numerical Reasoning</option>
+            <option value="Abstract">Abstract Reasoning</option>
+          </select>
+          <button onclick="generateQuestions()">Generate</button>
+          <div id="output" style="display:none; margin-top: 20px; background: #eef6fb; padding: 20px;">
+            <h3>📝 Your Practice Questions</h3>
+            <pre id="questions-text" style="white-space: pre-wrap; font-family: inherit;"></pre>
+            <button id="downloadBtn" onclick="downloadQuestions()">Download Questions ⬇️</button>
+          </div>
+        </div>`;
+      chartSetup();
     } else {
-      document.getElementById('assistant-message').innerHTML = 'Incorrect password. Try again.';
+      content.innerHTML = `<h3>📘 Placeholder for ${tabName.toUpperCase()} content</h3>`;
     }
-  }
+  }, 300);
+}
 
-  function sendMessage() {
-    var userInput = document.getElementById('user-input').value;
-    if (userInput.trim() !== '') {
-      document.getElementById('chat-response').innerHTML = '🤖 Assistant: Thanks for your question! (Demo response.)';
+function chartSetup() {
+  new Chart(document.getElementById("categoryChart"), {
+    type: "pie",
+    data: {
+      labels: ["Institutions", "History", "Policies", "Current Affairs", "Random"],
+      datasets: [{
+        data: [30, 25, 20, 15, 10],
+        backgroundColor: ["#007bff", "#28a745", "#ffc107", "#17a2b8", "#6c757d"]
+      }]
     }
-  }
+  });
+  new Chart(document.getElementById("materialChart"), {
+    type: "bar",
+    data: {
+      labels: ["Staff Regulations", "Role of Institutions", "Key Treaties", "Recent EU Initiatives"],
+      datasets: [{
+        label: "Focus Materials",
+        data: [5, 4, 3, 2],
+        backgroundColor: "#0077cc"
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+}
+
+function generateQuestions() {
+  const mockQuestions = Array.from({ length: 20 }, (_, i) => {
+    return `${i + 1}. Sample MCQ Question ${i + 1}?\nA) Option A\nB) Option B\nC) Option C\nD) Option D\n`;
+  }).join('\n');
+
+  document.getElementById("questions-text").innerText = mockQuestions.trim();
+  document.getElementById("output").style.display = "block";
+}
+
+function downloadQuestions() {
+  const text = document.getElementById("questions-text").innerText;
+  const blob = new Blob([text], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "practice_questions.txt";
+  link.click();
+}
 </script>
 
 </body>
