@@ -2,184 +2,317 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>concours.io</title>
+  <title>concour.io</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
+
     header {
       background-color: #202123;
       color: white;
-      display: flex;
-      align-items: center;
-      padding: 0 20px;
-      height: 60px;
-      font-size: 1.8em;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
     }
+
     .container {
-      flex: 1;
       display: flex;
+      flex: 1;
     }
+
     .sidebar {
       width: 260px;
       background-color: #202123;
-      display: flex;
-      flex-direction: column;
       padding-top: 20px;
     }
+
     .sidebar a {
+      display: block;
       padding: 12px 20px;
       text-decoration: none;
-      font-size: 18px;
       color: #b0b3b8;
-      display: block;
-      transition: background 0.2s, color 0.2s;
     }
-    .sidebar a:hover, .sidebar a.active-tab {
+
+    .sidebar a:hover, .sidebar a.active {
       background-color: #343541;
       color: white;
       border-left: 4px solid #00aaff;
-      padding-left: 16px;
     }
-    .main-content {
+
+    .main {
       flex: 1;
       padding: 30px;
+      background-color: #ffffff;
       overflow-y: auto;
     }
-    .loading {
-      font-size: 24px;
+
+    .graph-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .graph-box {
+      width: 32%;
+    }
+
+    .generate-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .generate-box {
+      flex: 1;
+    }
+
+    input, select, button, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .countdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .countdown-table td, .countdown-table th {
+      padding: 10px;
+      border: 1px solid #ccc;
       text-align: center;
-      margin-top: 50px;
-      color: #00aaff;
+    }
+
+    .done {
+      color: green;
+      font-weight: bold;
+    }
+
+    .countdown {
+      color: red;
+      font-weight: bold;
     }
   </style>
 </head>
+
 <body>
 
 <header>
-  concours.io
+  concour.io
 </header>
 
 <div class="container">
   <div class="sidebar">
-    <a href="#" onclick="openTab('home', this)" class="active-tab">🏠 Home</a>
-    <a href="#" onclick="openTab('ad5-external', this)">🛡️ 2025 AD5 External</a>
-    <a href="#" onclick="openTab('ad5-internal', this)">📚 2024 AD5 Internal</a>
-    <a href="#" onclick="openTab('ad6-internal', this)">📚 2024 AD6 Internal</a>
+    <a href="#" class="active" onclick="showTab('home')">🏠 Home</a>
+    <a href="#" onclick="showTab('ad5-external')">🛡️ 2025 AD5 External</a>
+    <a href="#" onclick="showTab('ad5-internal')">📚 2025 AD5 Internal</a>
+    <a href="#" onclick="showTab('ad6-internal')">📘 2025 AD6 Internal</a>
   </div>
 
-  <div class="main-content" id="tab-content">
-    <h3>Welcome! 🎯</h3>
-    <p>👋 Ready to kickstart your EU career?</p>
-    <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
-    <p>🛠️ More tools and features coming soon.</p>
+  <div class="main" id="content">
+    <h2>Welcome to concour.io 🎯</h2>
+    <p>Welcome to <strong>concour.io</strong>, your AI-powered assistant for preparing smarter for EU concours exams. Explore tailored study insights, question difficulty predictions, and practice generators that help you get exam-ready efficiently. Navigate to your exam tab and see what's likely coming up!</p>
+
+    <h3>⏱️ Concours Countdown</h3>
+    <table class="countdown-table">
+      <tr>
+        <th>Exam</th>
+        <th>Status</th>
+        <th>Countdown</th>
+      </tr>
+      <tr>
+        <td>2025 AD5 External</td>
+        <td class="countdown">Upcoming</td>
+        <td id="countdown-timer">Loading...</td>
+      </tr>
+      <tr>
+        <td>2025 AD5 Internal</td>
+        <td class="done">Done ✅</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>2025 AD6 Internal</td>
+        <td class="done">Done ✅</td>
+        <td>0</td>
+      </tr>
+    </table>
+
+    <h3>🚀 Join our BETA Testing Program</h3>
+    <p>Be the first to test AI-powered preparation tools for the concours. As a BETA tester, you'll gain early access, personalised guidance and the chance to shape the platform’s development.</p>
+    <input type="email" placeholder="Enter your email to join">
+    <button>Join Now</button>
   </div>
 </div>
 
 <script>
-function openTab(tabName, element) {
-  document.querySelectorAll(".sidebar a").forEach(link => link.classList.remove("active-tab"));
-  element.classList.add("active-tab");
+  function showTab(tabName) {
+    const content = document.getElementById('content');
+    const links = document.querySelectorAll('.sidebar a');
+    links.forEach(link => link.classList.remove('active'));
+    event.target.classList.add('active');
 
-  const content = document.getElementById("tab-content");
-  content.innerHTML = '<div class="loading">Loading...</div>';
-
-  setTimeout(() => {
-    if (tabName === "home") {
-      content.innerHTML = `<h3>Welcome! 🎯</h3>
-        <p>👋 Ready to kickstart your EU career?</p>
-        <p>📚 Navigate to your competition year and type. Prepare smarter, faster, and better!</p>
-        <p>🛠️ More tools and features coming soon.</p>`;
-    } else if (tabName === "ad5-external") {
-      const password = prompt("🔒 Enter password to access 2025 AD5 External:");
-      if (password !== "password") {
-        alert("Incorrect password. Access denied.");
-        content.innerHTML = '<h3>Access Denied 🚫</h3>';
+    if (tabName === 'home') {
+      location.reload();
+    } else if (tabName === 'ad5-external') {
+      const pwd = prompt("Enter password to access 2025 AD5 External:");
+      if (pwd !== 'password') {
+        alert("Incorrect password.");
         return;
       }
+
       content.innerHTML = `
-        <h3>🛡️ 2025 AD5 External Competition</h3>
-        <div style="display: flex; gap: 30px; justify-content: space-between; margin-bottom: 30px;">
-          <div style="flex: 1; background: white; padding: 15px; border-radius: 8px;">
-            <h3>Question Category</h3>
-            <canvas id="categoryChart" height="180"></canvas>
+        <h2>🛡️ 2025 AD5 External Exam Dashboard</h2>
+
+        <div class="graph-row">
+          <div class="graph-box">
+            <h4>🧭 Question Category Probability</h4>
+            <canvas id="categoryChart"></canvas>
           </div>
-          <div style="flex: 1; background: white; padding: 15px; border-radius: 8px;">
-            <h3>Focus Materials</h3>
-            <canvas id="materialChart" height="180"></canvas>
+          <div class="graph-box">
+            <h4>📊 Difficulty Spectrum</h4>
+            <canvas id="difficultyChart"></canvas>
+          </div>
+          <div class="graph-box">
+            <h4>📚 Recommended Study Material</h4>
+            <canvas id="materialChart"></canvas>
           </div>
         </div>
-        <div style="background: white; padding: 30px; border-radius: 10px; margin-top: 20px;">
-          <label><strong>What do you want generated?</strong></label><br/>
-          <select id="question-type" style="margin-top: 10px; margin-bottom: 10px; padding: 6px; width: 100%;">
-            <option value="MCQ">EU General Knowledge (MCQs)</option>
-            <option value="Verbal">Verbal Reasoning</option>
-            <option value="Numerical">Numerical Reasoning</option>
-            <option value="Abstract">Abstract Reasoning</option>
-          </select>
-          <button onclick="generateQuestions()">Generate</button>
-          <div id="output" style="display:none; margin-top: 20px; background: #eef6fb; padding: 20px;">
-            <h3>📝 Your Practice Questions</h3>
-            <pre id="questions-text" style="white-space: pre-wrap; font-family: inherit;"></pre>
-            <button id="downloadBtn" onclick="downloadQuestions()">Download Questions ⬇️</button>
+
+        <div class="generate-row">
+          <div class="generate-box">
+            <h4>📝 Generate Practice Questions</h4>
+            <select>
+              <option>EU General Knowledge</option>
+              <option>Numerical Reasoning</option>
+              <option>Verbal Reasoning</option>
+              <option>Abstract Reasoning</option>
+            </select>
+            <select>
+              <option>English</option>
+              <option>French</option>
+              <option>German</option>
+              <option>Spanish</option>
+              <option>Italian</option>
+              <!-- Add remaining EU languages -->
+            </select>
+            <button onclick="generateQuestions()">Generate</button>
+            <div id="questionOutput" style="margin-top:10px;"></div>
           </div>
-        </div>`;
-      chartSetup();
+
+          <div class="generate-box">
+            <h4>🔍 Explain This Topic</h4>
+            <input type="text" placeholder="e.g. Green Deal" id="explainInput">
+            <button onclick="explainTopic()">Generate Explanation</button>
+            <div id="explanationOutput" style="margin-top:10px;"></div>
+          </div>
+        </div>
+      `;
+
+      setTimeout(renderCharts, 100);
     } else {
-      content.innerHTML = `<h3>📘 Placeholder for ${tabName.toUpperCase()} content</h3>`;
+      content.innerHTML = "<h3>&lt;placeholder&gt;</h3>";
     }
-  }, 300);
-}
+  }
 
-function chartSetup() {
-  new Chart(document.getElementById("categoryChart"), {
-    type: "pie",
-    data: {
-      labels: ["Institutions", "History", "Policies", "Current Affairs", "Random"],
-      datasets: [{
-        data: [30, 25, 20, 15, 10],
-        backgroundColor: ["#007bff", "#28a745", "#ffc107", "#17a2b8", "#6c757d"]
-      }]
-    }
-  });
-  new Chart(document.getElementById("materialChart"), {
-    type: "bar",
-    data: {
-      labels: ["Staff Regulations", "Role of Institutions", "Key Treaties", "Recent EU Initiatives"],
-      datasets: [{
-        label: "Focus Materials",
-        data: [5, 4, 3, 2],
-        backgroundColor: "#0077cc"
-      }]
-    },
-    options: { scales: { y: { beginAtZero: true } } }
-  });
-}
+  function renderCharts() {
+    new Chart(document.getElementById('categoryChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Institutions', 'History', 'Policies', 'Current Affairs', 'Random'],
+        datasets: [{
+          data: [5, 4, 3, 2, 1],
+          backgroundColor: ['#337ab7', '#5cb85c', '#f0ad4e', '#5bc0de', '#d9534f']
+        }]
+      }
+    });
 
-function generateQuestions() {
-  const mockQuestions = Array.from({ length: 20 }, (_, i) => {
-    return `${i + 1}. Sample MCQ Question ${i + 1}?\nA) Option A\nB) Option B\nC) Option C\nD) Option D\n`;
-  }).join('\n');
+    new Chart(document.getElementById('difficultyChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Average Difficulty'],
+        datasets: [
+          {
+            label: 'All Exams',
+            data: [3],
+            backgroundColor: '#dcdcdc'
+          },
+          {
+            label: '2025 AD5 External',
+            data: [4],
+            backgroundColor: '#337ab7'
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true, max: 5 }
+        }
+      }
+    });
 
-  document.getElementById("questions-text").innerText = mockQuestions.trim();
-  document.getElementById("output").style.display = "block";
-}
+    new Chart(document.getElementById('materialChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Staff Regulations', 'Institutions', 'Key Treaties', 'EU Initiatives'],
+        datasets: [{
+          label: 'Focus Materials',
+          data: [5, 4, 3, 2],
+          backgroundColor: '#5cb85c'
+        }]
+      }
+    });
+  }
 
-function downloadQuestions() {
-  const text = document.getElementById("questions-text").innerText;
-  const blob = new Blob([text], { type: "text/plain" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "practice_questions.txt";
-  link.click();
-}
+  function generateQuestions() {
+    document.getElementById('questionOutput').innerHTML = `
+      <ol>
+        <li>What is the main role of the European Commission?<br>
+          A) Legislation<br>B) Oversight<br>C) Judiciary<br>D) Public relations</li>
+        <li>When was the Treaty of Lisbon signed?<br>
+          A) 2003<br>B) 2007<br>C) 2010<br>D) 2012</li>
+        <li>Which country joined the EU in 2004?<br>
+          A) Spain<br>B) Poland<br>C) Austria<br>D) Ireland</li>
+        <li>What does the CAP focus on?<br>
+          A) Transport<br>B) Agriculture<br>C) Energy<br>D) Defence</li>
+        <li>What is COREPER?<br>
+          A) Council Secretariat<br>B) Committee of the Regions<br>C) Permanent Representatives<br>D) Internal Market Committee</li>
+      </ol>`;
+  }
+
+  function explainTopic() {
+    const topic = document.getElementById('explainInput').value;
+    document.getElementById('explanationOutput').innerText = `The Green Deal is a set of policy initiatives by the European Commission to make Europe climate neutral by 2050, including energy, biodiversity, and food system reforms.`;
+  }
+
+  // Countdown timer
+  const countDownDate = new Date("Dec 1, 2025 09:00:00").getTime();
+  const timerInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = countDownDate - now;
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    document.getElementById("countdown-timer").innerHTML = days > 0 ? `${days} days` : 'Today!';
+  }, 1000);
 </script>
 
 </body>
