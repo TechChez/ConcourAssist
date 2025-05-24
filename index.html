@@ -113,6 +113,36 @@
       color: red;
       font-weight: bold;
     }
+
+    .tabs {
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      margin-right: 10px;
+      padding: 10px 16px;
+      border: none;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .tabs button.active {
+      background-color: #0078d4;
+      color: white;
+    }
+
+    .study-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .study-table td {
+      padding: 6px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+    }
   </style>
 </head>
 
@@ -131,10 +161,10 @@
   </div>
 
   <div class="main" id="content">
-    <h2>Welcome to concour.io 🎯</h2>
-    <p>Welcome to <strong>concour.io</strong>, your AI-powered assistant for preparing smarter for EU concours exams. Explore tailored study insights, question difficulty predictions, and practice generators that help you get exam-ready efficiently. Navigate to your exam tab and see what's likely coming up!</p>
+    <h2>🎯 Welcome to concour.io</h2>
+    <p>concour.io is your smart preparation assistant for EU concour exams. With integrated AI, it helps you focus on what matters most by predicting likely topics, estimating difficulty levels, recommending study materials, and generating custom practice questions in any EU language. Whether you’re preparing for an internal or external competition, this platform provides focused support, saving time and improving outcomes.</p>
 
-    <h3>⏱️ Concours Countdown</h3>
+    <h3>⏱️ Countdown (estimated)</h3>
     <table class="countdown-table">
       <tr>
         <th>Exam</th>
@@ -158,12 +188,29 @@
       </tr>
     </table>
 
-    <h3>🚀 Join our BETA Testing Program</h3>
-    <p>Be the first to test AI-powered preparation tools for the concours. As a BETA tester, you'll gain early access, personalised guidance and the chance to shape the platform’s development.</p>
+    <h3>🧪 Join our BETA Testing Program</h3>
+    <p>Be among the first to shape the future of concour.io. As a BETA tester, you’ll receive early access to all features, personalised study support, and the opportunity to provide direct feedback that will influence how the platform develops. Submit your email below and we’ll send you your beta access password.</p>
     <input type="email" placeholder="Enter your email to join">
     <button>Join Now</button>
   </div>
 </div>
+
+<script>
+  const countDownDate = new Date("Dec 1, 2025 09:00:00").getTime();
+  const timerInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = countDownDate - now;
+    if (distance < 0) {
+      document.getElementById("countdown-timer").innerHTML = "Started!";
+      return;
+    }
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById("countdown-timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+</script>
 
 <script>
   function showTab(tabName) {
@@ -174,28 +221,67 @@
 
     if (tabName === 'home') {
       location.reload();
-    } else if (tabName === 'ad5-external') {
-      const pwd = prompt("Enter password to access 2025 AD5 External:");
-      if (pwd !== 'password') {
-        alert("Incorrect password.");
-        return;
-      }
+    } else {
+      let pwd = prompt("Enter password to access this tab:");
+      if (tabName === 'ad5-external' && pwd !== 'LetsTest1') return alert("Incorrect password.");
+      if ((tabName === 'ad5-internal' || tabName === 'ad6-internal') && pwd !== 'password1') return alert("Incorrect password.");
 
-      content.innerHTML = `
-        <h2>🛡️ 2025 AD5 External Exam Dashboard</h2>
+      if (tabName === 'ad5-external') {
+        content.innerHTML = `
+          <h2>🛡️ 2025 AD5 External Competition</h2>
+          <div class="horizontal-tabs">
+            <button class="subtab active" onclick="showSubTab('overview', this)">Overview</button>
+            <button class="subtab" onclick="showSubTab('cbt', this)">Computer-Based Tests</button>
+            <button class="subtab" onclick="showSubTab('written', this)">Written Assignment</button>
+            <button class="subtab" onclick="showSubTab('interview', this)">Final Interview</button>
+          </div>
+          <div id="subtab-content" style="margin-top: 20px;"></div>
+        `;
+        showSubTab('overview', document.querySelector('.subtab.active'));
+      } else {
+        content.innerHTML = `<h3>&lt;placeholder&gt;</h3>`;
+      }
+    }
+  }
+
+  function showSubTab(name, btn) {
+    const subtab = document.getElementById('subtab-content');
+    document.querySelectorAll(".horizontal-tabs button").forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (name === 'overview') {
+      subtab.innerHTML = `
+        <p>The 2025 AD5 External competition is designed for candidates seeking to join the EU institutions as policy officers. It involves computer-based reasoning tests, a written assignment, and a final interview. Visit <a href="https://eu-careers.europa.eu" target="_blank">EU Careers</a> for the official competition notice and eligibility requirements.</p>
+      `;
+    }
+
+    if (name === 'cbt') {
+      subtab.innerHTML = `
+        <p>This section helps you prepare for the Computer-Based Tests (CBTs), including General Knowledge, Numerical Reasoning, and Abstract Reasoning. Below are visual insights and two interactive AI tools to boost your readiness.</p>
 
         <div class="graph-row">
           <div class="graph-box">
-            <h4>🧭 Question Category Probability</h4>
+            <h4>📊 Question Category Probability</h4>
             <canvas id="categoryChart"></canvas>
           </div>
           <div class="graph-box">
-            <h4>📊 Difficulty Spectrum</h4>
+            <h4>📈 Difficulty Estimate</h4>
             <canvas id="difficultyChart"></canvas>
           </div>
           <div class="graph-box">
-            <h4>📚 Recommended Study Material</h4>
-            <canvas id="materialChart"></canvas>
+            <h4>📚 Recommended Study Topics</h4>
+            <table class="study-table">
+              <tr><td>Staff Regulations</td></tr>
+              <tr><td>EU Institutions</td></tr>
+              <tr><td>Digital Europe Programme</td></tr>
+              <tr><td>EU Treaties (TEU/TFEU)</td></tr>
+              <tr><td>EU Budget & MFF</td></tr>
+              <tr><td>Rule of Law Mechanism</td></tr>
+              <tr><td>Social Pillar</td></tr>
+              <tr><td>Green Deal</td></tr>
+              <tr><td>Enlargement Process</td></tr>
+              <tr><td>Recent Commission Priorities</td></tr>
+            </table>
           </div>
         </div>
 
@@ -214,7 +300,6 @@
               <option>German</option>
               <option>Spanish</option>
               <option>Italian</option>
-              <!-- Add remaining EU languages -->
             </select>
             <button onclick="generateQuestions()">Generate</button>
             <div id="questionOutput" style="margin-top:10px;"></div>
@@ -228,10 +313,23 @@
           </div>
         </div>
       `;
-
       setTimeout(renderCharts, 100);
-    } else {
-      content.innerHTML = "<h3>&lt;placeholder&gt;</h3>";
+    }
+
+    if (name === 'written') {
+      subtab.innerHTML = `
+        <p>For this stage, you'll receive a policy-based scenario and will have to write a brief analysis or proposal. You’ll be assessed on structure, clarity, and EU understanding.</p>
+        <p><strong>Mock Question:</strong> "What actions should the EU take to ensure secure access to critical raw materials in the next decade?"</p>
+        <textarea rows="6" placeholder="Write your answer here..."></textarea>
+        <button onclick="markAnswer()">Mark My Answer</button>
+        <div id="markFeedback" style="margin-top:10px;"></div>
+      `;
+    }
+
+    if (name === 'interview') {
+      subtab.innerHTML = `
+        <p>This final stage will test your motivation, behavioural traits, and EU awareness. More tailored preparation content will be added soon.</p>
+      `;
     }
   }
 
@@ -239,9 +337,9 @@
     new Chart(document.getElementById('categoryChart'), {
       type: 'pie',
       data: {
-        labels: ['Institutions', 'History', 'Policies', 'Current Affairs', 'Random'],
+        labels: ['Institutions', 'History', 'Policies', 'Current Affairs', 'Other'],
         datasets: [{
-          data: [5, 4, 3, 2, 1],
+          data: [6, 5, 4, 3, 2],
           backgroundColor: ['#337ab7', '#5cb85c', '#f0ad4e', '#5bc0de', '#d9534f']
         }]
       }
@@ -270,18 +368,6 @@
         }
       }
     });
-
-    new Chart(document.getElementById('materialChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Staff Regulations', 'Institutions', 'Key Treaties', 'EU Initiatives'],
-        datasets: [{
-          label: 'Focus Materials',
-          data: [5, 4, 3, 2],
-          backgroundColor: '#5cb85c'
-        }]
-      }
-    });
   }
 
   function generateQuestions() {
@@ -302,18 +388,41 @@
 
   function explainTopic() {
     const topic = document.getElementById('explainInput').value;
-    document.getElementById('explanationOutput').innerText = `The Green Deal is a set of policy initiatives by the European Commission to make Europe climate neutral by 2050, including energy, biodiversity, and food system reforms.`;
+    document.getElementById('explanationOutput').innerText = `The ${topic || 'Green Deal'} is a strategic initiative by the European Commission aimed at ensuring a sustainable and inclusive EU. It includes climate neutrality by 2050, biodiversity targets, and energy transition policies.`;
   }
 
-  // Countdown timer
-  const countDownDate = new Date("Dec 1, 2025 09:00:00").getTime();
-  const timerInterval = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = countDownDate - now;
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    document.getElementById("countdown-timer").innerHTML = days > 0 ? `${days} days` : 'Today!';
-  }, 1000);
+  function markAnswer() {
+    document.getElementById('markFeedback').innerText = `✅ Your answer demonstrates a strong grasp of the topic. To improve further, consider integrating specific EU policy references and proposing concrete actions.`;
+  }
 </script>
+
+<style>
+  .horizontal-tabs {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .horizontal-tabs button {
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #202123;
+  }
+
+  .horizontal-tabs button.active {
+    background: #202123;
+    color: white;
+    border-bottom: 2px solid #00aaff;
+  }
+
+  .study-table td {
+    padding: 5px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ccc;
+  }
+</style>
 
 </body>
 </html>
