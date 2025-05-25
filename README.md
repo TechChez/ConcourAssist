@@ -7,7 +7,6 @@
 - Dynamic practice question generator
 - Visual exam breakdowns (topics, difficulty, materials)
 - AI-powered topic explainer
-- Email collection for beta testers (Google Sheets integrated)
 - Password-protected exam content
 
 ## Running the Project
