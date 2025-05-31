@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2025 AD5 External | concour.io</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #eee;
+    }
+    .logo {
+      background-color: #003399;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+    nav a {
+      background-color: #f4f4f4;
+      color: #333;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+    }
+    nav a:hover {
+      background-color: #e0e0e0;
+    }
+    .main {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    .tab-bar button {
+      background-color: #003399;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    .tab-bar button.active {
+      background-color: #001a66;
+      border-bottom: 2px solid #00aaff;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .graph-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .graph-box {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    @media (min-width: 768px) {
+      .graph-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo">concour.io</a>
+  <nav>
+    <a href="index.html">⬅ Back to Home</a>
+  </nav>
+</header>
+
+<div class="main">
+  <h2>🛡️ 2025 AD5 External Competition</h2>
+  <div class="tab-bar">
+    <button onclick="switchSubTab('overview', this)" class="active">Overview</button>
+    <button onclick="switchSubTab('eu', this)">EU Knowledge</button>
+    <button onclick="switchSubTab('reasoning', this)">Reasoning Test</button>
+    <button onclick="switchSubTab('written', this)">Written Assignment</button>
+    <button onclick="switchSubTab('interview', this)">Final Interview</button>
+  </div>
+
+  <div id="overview" class="tab-content active">
+    <p>The AD5 External competition is the entry-level concours for officials joining the EU institutions. It usually comprises multiple phases: computer-based testing, a written assignment, and an interview.</p>
+    <p>Applicants must be EU citizens with a university degree and typically pass a series of aptitude and knowledge-based tests.</p>
+    <p><a href="https://epso.europa.eu/en" target="_blank">View official EPSO site for more info</a></p>
+  </div>
+
+  <div id="eu" class="tab-content">
+    <div class="graph-grid">
+      <div class="graph-box">
+        <h4>📊 Question Category Probability</h4>
+        <canvas id="categoryChart" style="max-width: 300px; height: auto;"></canvas>
+      </div>
+      <div class="graph-box">
+        <h4>📚 Recommended Study Material</h4>
+        <ul>
+          <li>Staff Regulations</li>
+          <li>EU Institutions Overview</li>
+          <li>Lisbon Treaty</li>
+          <li>EU Enlargement</li>
+          <li>Recent EU Initiatives</li>
+          <li>Rule of Law Reports</li>
+          <li>European Semester</li>
+          <li>Digital & Green Transitions</li>
+          <li>Security and Defence</li>
+          <li>Competitiveness agenda</li>
+        </ul>
+      </div>
+    </div>
+    <div class="graph-box">
+      <h4>📝 Generate Mock Exam</h4>
+      <button onclick="generateMockExam()">Generate</button>
+      <div id="mockExamOutput" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <div id="reasoning" class="tab-content">
+    <p>The reasoning test assesses your ability to understand, analyze, and evaluate written and abstract information logically and effectively.</p>
+    <div class="graph-box">
+      <h4>🧠 Verbal Reasoning</h4>
+      <button onclick="generateReasoningExample()">Generate</button>
+      <div id="reasoningOutput" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <div id="written" class="tab-content">
+    <p>The written assignment requires analytical thinking and policy understanding. It’s often a case-style memo or briefing.</p>
+    <p><strong>Mock Task:</strong> The EU is planning a Digital Skills Year. Write a policy brief summarising how this could address the skills gap across Member States and support the EU's Digital Decade objectives.</p>
+    <textarea rows="8" placeholder="Write your answer here..."></textarea>
+    <button onclick="markAnswer()">Mark My Answer</button>
+    <div id="feedbackBox" style="margin-top:10px;"></div>
+  </div>
+
+  <div id="interview" class="tab-content">
+    <p>The final stage of the competition is an interview. It assesses your ability to present, argue, and reason with clarity. Practice with structured questions is recommended.</p>
+    <p>🚧 More interview preparation content coming soon.</p>
+  </div>
+</div>
+
+<script>
+  function switchSubTab(tabId, element) {
+    const tabs = document.querySelectorAll(".tab-content");
+    tabs.forEach(t => t.classList.remove("active"));
+    document.getElementById(tabId).classList.add("active");
+
+    const buttons = document.querySelectorAll(".tab-bar button");
+    buttons.forEach(b => b.classList.remove("active"));
+    element.classList.add("active");
+  }
+
+  function generateMockExam() {
+    document.getElementById("mockExamOutput").innerHTML = `
+      <strong>Mock Questions:</strong>
+      <ol>
+        <li>Which Treaty established the European Union?<br>A) Maastricht<br>B) Rome<br>C) Lisbon<br>D) Paris</li>
+        <li>What is the role of the European Parliament?<br>A) Judicial Review<br>B) Legislative & Budget<br>C) Policy Enforcement<br>D) Treaty Negotiation</li>
+      </ol>`;
+  }
+
+  function generateReasoningExample() {
+    document.getElementById("reasoningOutput").innerHTML = `
+      <strong>Verbal Reasoning Sample:</strong>
+      <p>Statement: All EU citizens have the right to move and reside freely within the territory of the Member States. Some Member States have restrictions for non-EU citizens.</p>
+      <p>Question: Based on the statement, which conclusion is most accurate?</p>
+      <ul>
+        <li>A) No EU citizen can be restricted from moving within the EU.</li>
+        <li>B) Non-EU citizens enjoy the same rights as EU citizens.</li>
+        <li>C) Some movement restrictions exist for non-EU citizens.</li>
+        <li>D) All citizens have unrestricted rights in the EU.</li>
+      </ul>`;
+  }
+
+  function markAnswer() {
+    document.getElementById("feedbackBox").innerText = "Great structure! Consider elaborating more on the Digital Decade targets. Your arguments were relevant and well-supported.";
+  }
+
+  function renderCharts() {
+    new Chart(document.getElementById('categoryChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Institutions', 'History', 'Policies', 'Current Affairs', 'Random'],
+        datasets: [{
+          data: [5, 4, 3, 2, 1],
+          backgroundColor: ['#337ab7', '#5cb85c', '#f0ad4e', '#5bc0de', '#d9534f']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+      }
+    });
+  }
+
+  window.onload = function() {
+    renderCharts();
+  }
+</script>
+
+</body>
+</html>
